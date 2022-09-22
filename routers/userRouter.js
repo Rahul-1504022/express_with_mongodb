@@ -16,12 +16,19 @@ const newUser = async (req, res) => {
         password: req.body.password,
     });
     const salt = await bcrypt.genSalt(10);
+    if (user.password === "") {
+        return res.status(400).send("Password cannot be null");
+    }
     user.password = await bcrypt.hash(user.password, salt);
     try {
         const result = await user.save();
+        const token = user.generateJWT();
         res.send({
-            name: result.name,
-            email: result.email,
+            token: token,
+            data: {
+                name: result.name,
+                email: result.email,
+            }
         });
     } catch (error) {
         const errMsgs = [];

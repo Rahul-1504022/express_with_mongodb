@@ -8,7 +8,10 @@ const authRouter = require('./routers/authRouter')
 
 
 app.use(express.json());
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan('dev'));
+}
+
 
 app.use('/api/students', studentRouter);
 app.use('/api/user', userRouter);

@@ -1,4 +1,5 @@
 const { model, Schema } = require("mongoose");
+const jwt = require('jsonwebtoken');
 
 
 const userSchema = new Schema({
@@ -20,8 +21,18 @@ const userSchema = new Schema({
         required: true,
         minlength: 5,
         maxlength: 255,
+        null: false
     }
 });
+
+//use this type function call because we call property of  object in a function
+userSchema.methods.generateJWT = function () {
+    const token = jwt.sign({
+        _id: this._id,
+        email: this.email,
+    }, process.env.mySecretKey);
+    return token;
+}
 
 const User = new model("User", userSchema);
 module.exports.User = User; 

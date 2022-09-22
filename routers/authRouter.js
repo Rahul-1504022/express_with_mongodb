@@ -3,7 +3,7 @@ const router = express.Router();
 const { User } = require('../models/users');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 
 const authUser = async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
@@ -14,11 +14,8 @@ const authUser = async (req, res) => {
     if (!validUser) {
         return res.status(400).send("User not found!");
     }
-    const token = jwt.sign({
-        _id: user._id,
-        email: user.email,
-    }, 'secretKey');
-    res.send(token);
+    const token = user.generateJWT();
+    res.send({ token: token });
 
 }
 
