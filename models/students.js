@@ -3,6 +3,7 @@ const { Schema, model } = require('mongoose');
 
 //define Schema (like property of Table in mySql)
 //then create a model(like Table creation in mySql)
+//then input collection(like row data in table)
 const Student = model('Student', Schema({
     name: { type: String, required: true },
     age: { type: Number, min: 0 },

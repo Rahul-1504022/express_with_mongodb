@@ -43,14 +43,30 @@ const studentDetail = async (req, res) => {
 
 };
 
-const studentUpdate = (req, res) => {
-    const id = parseInt(req.params.id);
-    const updatedData = req.body;
+const studentUpdate = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const student = await Student.updateOne({ _id: id }, {
+            $set: {
+                name: "Asma Khatun"
+            }
+        });
+        return res.send("Updated Successfully!");
+    } catch (error) {
+        return res.status(400).send(error.message);
+    }
 
 };
 
-const studentDelete = (req, res) => {
-    const id = parseInt(req.params.id);
+const studentDelete = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const student = await Student.deleteOne({ _id: id });
+        console.log(student);
+        return res.send("Id deleted Successfully!");
+    } catch {
+        return res.status(400).send("Id cannot delete!");
+    }
 
 };
 
