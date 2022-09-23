@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { Student } = require('../models/students');
+const authorize = require('../middlewares/authorize');
+const admin = require("../middlewares/admin");
 
 const studentList = async (req, res) => {
+
     try {
         const readStudent = await Student.find();
         res.send(readStudent);
@@ -14,6 +17,7 @@ const studentList = async (req, res) => {
 };
 
 const newStudent = async (req, res) => {
+
     const student = new Student(req.body);
     try {
         const result = await student.save();
@@ -77,6 +81,6 @@ router.route('/')
 router.route('/:id')
     .get(studentDetail)
     .put(studentUpdate)
-    .delete(studentDelete);
+    .delete([authorize, admin], studentDelete);
 
 module.exports = router;

@@ -22,14 +22,20 @@ const userSchema = new Schema({
         minlength: 5,
         maxlength: 255,
         null: false
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: "user",
     }
 });
 
 //use this type function call because we call property of  object in a function
 userSchema.methods.generateJWT = function () {
-    const token = jwt.sign({
+    const token = jwt.sign({ //set payload
         _id: this._id,
         email: this.email,
+        role: this.role,
     }, process.env.mySecretKey);
     return token;
 }
